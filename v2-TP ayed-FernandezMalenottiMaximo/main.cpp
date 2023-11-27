@@ -102,8 +102,8 @@ struct nodoProdVendidos{
 struct Vendedor {
 	char codEmp[9+1];
 	char nombreApellido[50+1];
-	int cantProdVendidos;
-	float totalRec;
+	int cantProdVendidos = 0;
+	float totalRec = 0;
 	nodoProdVendidos* listVendido;
 };
 
@@ -158,16 +158,9 @@ bool cargaVentas (Vendedor* vectorVendedores, int contadorEmp){
                 nuevaVenta->sig = NULL;
 
                 // Agrega la venta a la pila (lista enlazada) del empleado
-                cout<<"direccion de nueva venta sig: "<<nuevaVenta <<endl;
-				cout<<"direccion de primer venta: "<<vectorVendedores[i].listVendido <<endl;
 
 				nuevaVenta->sig = vectorVendedores[i].listVendido;
 				vectorVendedores[i].listVendido = nuevaVenta;
-
-				cout<<"direccion de nueva venta sig: "<<nuevaVenta->sig <<endl;
-				cout<<"direccion de primer venta"<<vectorVendedores[i].listVendido<<endl<<endl;
-
-
                 // Calcula el total recaudado
                 vectorVendedores[i].totalRec += lecVentas.precioVenta;
                 break;
@@ -208,23 +201,37 @@ bool imprimirDatos (Vendedor* vectorVendedores, int contadorEmp){
 
     for (int i = 0; i < contadorEmp; i++) {
         cout
+        << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
         << "Código Empleado: " << vectorVendedores[i].codEmp << endl
         << "Nombre y Apellido: "<< vectorVendedores[i].nombreApellido << endl
         << "Cantidad de productos Vendidos: "<< vectorVendedores[i].cantProdVendidos << endl
-        << "Total de Ventas: " << vectorVendedores[i].totalRec << endl<<endl;
-
+        << "Total recaudado: " << vectorVendedores[i].totalRec << endl;
+        if (vectorVendedores[i].totalRec > 0){
+            cout<< "\nProductos vendidos: "<<endl
+                << "┌----------------┬----------┐\n"
+                   "|Codigo producto |  Fecha   |\n"
+                   "├----------------┼----------┤\n";
+        }else{
+        cout<<"\n~Sin Ventas~\n\n";
+        }
         // imprime las ventas de cada vendedor
         if (vectorVendedores[i].listVendido != NULL) {
             int cantVentas=1;
             while(vectorVendedores[i].listVendido!= NULL){
+
+                cout<<"|       "<<vectorVendedores[i].listVendido->info.codProd<<"        | "
+                    <<vectorVendedores[i].listVendido->info.fecha<<" |\n";
+                cout<<"├----------------┼----------┤\n";
+                /*
                 cout<<"cod prod: "<<vectorVendedores[i].listVendido->info.codProd<<endl;
                 cout<<"fecha: "<<vectorVendedores[i].listVendido->info.fecha<<endl;
                 cout<<"precio de venta: "<<vectorVendedores[i].listVendido->info.precioVenta<<endl<<endl;
-
+                */
                 if(vectorVendedores[i].listVendido != NULL){vectorVendedores[i].listVendido = vectorVendedores[i].listVendido ->sig;}
                 cantVentas++;
 
             }
+            cout<<endl;
 
         }
 
@@ -252,11 +259,16 @@ void resolucionTp() {
 
 int main() {
 	crearEmpleados();
-	mostrarEmpleados();
+	//mostrarEmpleados();
 	crearVentas();
-	mostrarVentas();
+	//mostrarVentas();
 
 	resolucionTp();
-
+	/*
+cout<<"┌----------------┬----------┐\n"
+      "|Codigo producto |  Fecha   |\n"
+      "├----------------┼----------┤\n"
+      "|       5        | 20141015 |\n";
+      */
 	return 0;
 }
