@@ -110,10 +110,10 @@ struct Vendedor {
 //funciones----------------------------------------------------------------------------
 
 bool cargaVendedores (Vendedor* vectorVendedores, int& contadorEmp);   //carga los vendedores desde el archivo al vector
-bool cargaVentas (Vendedor* vectorVendedores, int contadorEmp);          //carga las ventas correspondientes a cada vendedor
-bool imprimirDatos (Vendedor* vectorVendedores, int contadorEmp);                           //imprime los datos existentes en el vector
-int compararVentasPorFechaDesc(const void* a, const void* b);               //funcion de ordenamiento para qsort
-int compararVendedores(const void* a, const void* b);                       //funcion de ordenamiento para qsort
+bool cargaVentas (Vendedor* vectorVendedores, int contadorEmp);        //carga las ventas correspondientes a cada vendedor
+bool imprimirDatos (Vendedor* vectorVendedores, int contadorEmp);      //imprime los datos existentes en el vector
+int compararVentasPorFechaDesc(const void* a, const void* b);          //funcion de ordenamiento para qsort
+int compararVendedores(const void* a, const void* b);                  //funcion de ordenamiento para qsort
 
 
 bool cargaVendedores(Vendedor* vectorVendedores, int& contadorEmp){
@@ -129,6 +129,7 @@ bool cargaVendedores(Vendedor* vectorVendedores, int& contadorEmp){
 		strcpy (vectorVendedores[contadorEmp].codEmp, lecEmpleado.codEmp);
 		strcpy (vectorVendedores[contadorEmp].nombreApellido, lecEmpleado.nombYApe);
 		vectorVendedores[contadorEmp].cantProdVendidos = lecEmpleado.cantProdVend;
+        vectorVendedores[contadorEmp].listVendido = NULL;
 
 		fread(&lecEmpleado, sizeof(Empleado), 1, archVendedores);
 
@@ -200,13 +201,12 @@ int compararVentasPorFechaDesc(const void* a, const void* b) {
     return (ventaB->info.fecha > ventaA->info.fecha);
 }
 
-
 bool imprimirDatos (Vendedor* vectorVendedores, int contadorEmp){
 
     // Ordena los vendedores en orden ascendente según lo recaudado
     qsort(vectorVendedores, contadorEmp, sizeof(Vendedor), compararVendedores);
 
-    for (int i = 0; i <= contadorEmp; i++) {
+    for (int i = 0; i < contadorEmp; i++) {
         cout
         << "Código Empleado: " << vectorVendedores[i].codEmp << endl
         << "Nombre y Apellido: "<< vectorVendedores[i].nombreApellido << endl
@@ -222,23 +222,17 @@ bool imprimirDatos (Vendedor* vectorVendedores, int contadorEmp){
                 cout<<"precio de venta: "<<vectorVendedores[i].listVendido->info.precioVenta<<endl<<endl;
 
                 if(vectorVendedores[i].listVendido != NULL){vectorVendedores[i].listVendido = vectorVendedores[i].listVendido ->sig;}
-
-                cout<<vectorVendedores[i].listVendido<<endl;
-                cout<<cantVentas<<endl;
                 cantVentas++;
 
             }
-            cout<<"dentro del if"<<endl;
+
         }
 
-    cout<<"antes de finalizar el bucle"<<endl;
 
     }
 
     return true;
 }
-
-
 
 //resolucion---------------------------------------------------------------------------
 void resolucionTp() {
